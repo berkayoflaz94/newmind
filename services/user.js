@@ -18,6 +18,25 @@ async function createUser(userParams){
         return false;
     }
 }
+async function getUser(userParams){
+    const {id} = userParams;
+    try{
+        const newUser = await mongooseUser.findById(id);
+        return newUser;
+    }catch(e){
+        console.log(e);
+        return false;
+    }
+}
+async function getUsers(userParams){
+    try{
+        const newUser = await mongooseUser.find();
+        return newUser;
+    }catch(e){
+        console.log(e);
+        return false;
+    }
+}
 async function updateUser(userParams){
     const id = userParams.id;
     const email = userParams.email;
@@ -46,5 +65,7 @@ async function deleteUser(userParams){
 module.exports = {
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUsers,
+    getUser
 }

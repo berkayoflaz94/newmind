@@ -2,6 +2,7 @@ const express = require('express');
 const routes = require('./routes/index');
 const mongoose = require('mongoose')
 const config = require('./config/db');
+require('dotenv').config()
 
 const app = express();
 
@@ -16,7 +17,15 @@ config.connectDB();
 
 //localhost:3000
 //örnek router
+app.get('/test',function(req,res,next){
+    console.log('middleware')
+    next();
+},function(req,res){
+    console.log('controller');
+    res.status(200).send({success:true});
+})
+//localhost:3000/test
 app.use('/api',routes);
-app.listen(3000,() =>{
-    console.log('ayaktayiz')
+app.listen(8000,() =>{
+    console.log('ayaktayiz',process.env.JWT_SECRET);
 })

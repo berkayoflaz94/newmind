@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 async function connectDB(){
     try{
-        await mongoose.connect('mongodb+srv://berkayoflaz:A1D2yoqak757uNbd@newmind.3nujs.mongodb.net/?retryWrites=true&w=majority&appName=newmind');
+        await mongoose.connect(process.env.MONGO_URL);
         console.log('baglndik');
     }catch(e){
-        console.log(error,'mongoERROR')
+        console.log(e,'mongoERROR')
     }
 }
 
