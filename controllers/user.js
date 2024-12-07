@@ -1,4 +1,5 @@
 const userService = require('../services/user')
+const kafka = require('../utils/kafka')
 const userController = {
     updateUser: async(req,res)=>{
         try{
@@ -44,6 +45,7 @@ const userController = {
                 
             }*/
             //kafka.sendMessage('asdas','asdads')
+            kafka.sendMessage('order','test3')
             res.status(200).send({response:[]})
         }catch(e){
             console.log(e,'error')

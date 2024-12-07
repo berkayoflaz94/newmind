@@ -2,6 +2,7 @@ const express = require('express');
 const routes = require('./routes/index');
 const mongoose = require('mongoose')
 const config = require('./config/db');
+const redis = require('./utils/redis')
 require('dotenv').config()
 
 const app = express();
@@ -11,6 +12,10 @@ app.use(express.json());
 //url için
 app.use(express.urlencoded({ extended: true }));
 
+
+
+//redis connection
+redis.redisCon();
 
 //Database connect process
 config.connectDB();
