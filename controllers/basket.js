@@ -3,15 +3,15 @@ const basketService = require('../services/basket')
 
 const basketController = {
     create: async(req,res)=>{
-        const {userId,productId} = req.body;
+        const {userId,product} = req.body;
         if(!userId){
             return res.status(502).send({message:"userId is required"})
         }
-        if(!productId){
+        if(!product.productId){
             return res.status(502).send({message:"productId is required"})
         }
         try{
-            const response = await basketService.addToCart(req.body)
+            const response = await basketService.addProductInBasket(req.body)
             res.status(200).send({response:response})
         }catch(e){
             console.log(e,'error')
@@ -36,12 +36,15 @@ const basketController = {
         
     },
     delete: async(req,res)=>{
-        const {id} = req.body;
-        if(!id){
-            return res.status(502).send({message:"id is required"})
+        const {userId,productId} = req.body;
+        if(!userId){
+            return res.status(502).send({message:"userId is required"})
+        }
+        if(!productId){
+            return res.status(502).send({message:"productId is required"})
         }
         try{
-            const response = await basketService.deleleteF(id)
+            const response = await basketService.removeProductFromBasket(req.body)
             console.log(response,'result');
             res.status(200).send({response:response})
         }catch(e){
@@ -49,10 +52,22 @@ const basketController = {
         }
         
     },
-    getAll: async(req,res)=>{
+    clearBasket:async(req,res)=>{
+        const {userId} = req.body;
+        if(!userId){
+            return res.status(502).send({message:"userId is required"})
+        }
         try{
-            const response = await basketService.getAll()
+            const response = await basketService.clearBasket(req.body)
             console.log(response,'result');
+            res.status(200).send({response:response})
+        }catch(e){
+            console.log(e,'error')
+        }
+    },
+    getBasket: async(req,res)=>{
+        try{
+            const response = await basketService.getBasket(req.params);
             res.status(200).send({response:response})
         }catch(e){
             console.log(e,'error')
