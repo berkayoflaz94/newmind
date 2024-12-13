@@ -1,10 +1,34 @@
 
 const mongooseProduct = require('../models/product')
+const { createClient } = require('redis')
+
+
+let redisClient;
+
+async function createRedisClient(){
+    if(!redisClient){
+        redisClient = await createClient()
+        .on('error', err => console.log('Redis Client Error', err))
+        .connect()
+
+    }
+    return redisClient
+}
 
 async function getAll(){
+    const key = "showcase";
     try{
-        const getProduct = await mongooseProduct.find();
-        return getProduct;
+        const client = await createRedisClient();
+        const getShowcase = await client.get(key);
+        if(getShowcase === null){
+            const getProduct = await mongooseProduct.find();
+            await client.set(key,JSON.stringify(getProduct))
+            console.log('hala veritabanından alıyorum')
+            return getProduct;
+        }else{
+            console.log('ben redise düştüm');
+            return JSON.parse(getShowcase)
+        }
     }catch(e){
         console.log(e);
         return false;

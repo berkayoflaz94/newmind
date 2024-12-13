@@ -1,52 +1,79 @@
+const { createClient } = require('redis')
 
-const redis = require('../utils/redis')
+
+let redisClient;
+
+async function createRedisClient(){
+    if(!redisClient){
+        redisClient = await createClient()
+        .on('error', err => console.log('Redis Client Error', err))
+        .connect()
+
+    }
+    return redisClient
+}
 
 
-const cartKey = getCartKey(userId)
+async function addProductInBasket(params){
+    
+    const {userId,product} = params
+    const cartKey = userId;
+    try{
+        const client = await createRedisClient();
+        const getBasket = await client.get(cartKey) ? JSON.parse(await client.get(cartKey)) : [];
+        getBasket.push(product)
+        /*const newBasket = getBasketParse.concat(products);*/
+        await client.set(cartKey,JSON.stringify(getBasket))
+        console.log(getBasket,'getBasket')
+        //return true;
+    }catch(e){
+        console.log(e);
+        return false;
+    }
+}
+async function getBasket(params){
+    const client = await createRedisClient();
+    const cartKey = params.userId
 
-async function addToCart(params){
+    try{
+        const value = await client.get(cartKey);
+        return JSON.parse(value);
+    }catch(e){
+        console.log(e);
+    }
+}
+async function removeProductFromBasket(params){
     const {userId,productId} = params
     try{
-        await client.hset(cartKey,productId,userId)
-        res.status(200).send({message:'success'})
-       
+        const client = await createRedisClient();
+        
+        const getBasket = await client.get(userId) ? JSON.parse(await client.get(userId)) : [];
+        const indexToRemove = getBasket.findIndex(product => product.productId === productId) 
+        if(indexToRemove !== -1){
+            getBasket.splice(indexToRemove,1)
+        }
+        await client.set(userId,JSON.stringify(getBasket))
+        console.log(getBasket,'getBasket')
         return true;
     }catch(e){
-        console.log(e);
+        console.log(e,'error')
         return false;
     }
 }
-async function getCartKey(params){
-    const cartKey = getCartKey(userId)
-
+async function clearBasket(params){
+    const {userId} = params
     try{
-        const cart = await client.hgetall(cartKey)
-
-        if(!cart){
-            return res.status(404).send({message:"sepet boş"})
-        }
-        res.status(200).send({message:'success',data:cart})
+        const client = await createRedisClient();
+        await client.set(userId,"")
+        return true;
     }catch(e){
-        console.log(e);
-    }
-}
-async function removeFromCart(params){
-    const {userId,productId} = params
-    const cartKey = getCartKey(userId)
-    try{
-        const result = await client.hdel(cartKey,productId)
-
-        if(result === 0){
-            return res.status(404).send({message:"Ürün bulunamadı"})
-        }
-        res.status(200).send({message:'Ürün sepetten silindi.'})
-
-    }catch(e){
-        console.log(e);
+        console.log(e,'error')
         return false;
     }
+
 }
 
+/*
 async function update(params){
     const {id,name,price,color,stock} = params;
     try{
@@ -63,7 +90,7 @@ async function update(params){
         return false;
     }
 }
-async function deleleteF(params){
+async function removeProductFromBasket(params){
     const id = params;
     try{
         const productDelete = await mongooseBasket.findByIdAndDelete(id);
@@ -72,10 +99,12 @@ async function deleleteF(params){
         console.log(e);
         return false;
     }
-}
+}*/
 module.exports = {
-    addToCart,
-    update,
-    deleleteF,
-    removeFromCart
+    addProductInBasket,
+    getBasket,
+    removeProductFromBasket,
+    clearBasket
+    //update,
+    //deleleteF,
 }
