@@ -13,7 +13,7 @@ const orderController = {
         }
         try{
             const response = await orderService.create(req.body)
-            io.emit('newOrder', {order:"#111"});
+            //io.emit('newOrder', {order:"#111"});
             console.log(response,'result');
             res.status(200).send({response:response})
         }catch(e){
