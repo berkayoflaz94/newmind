@@ -3,6 +3,7 @@ const kafka = require('../utils/kafka')
 
 const orderController = {
     create: async(req,res)=>{
+        const io = req.app.get('io');
         const {userId,products} = req.body;
         if(!userId){
             return res.status(502).send({message:"userId is required"})
@@ -12,6 +13,7 @@ const orderController = {
         }
         try{
             const response = await orderService.create(req.body)
+            io.emit('newOrder', {order:"#111"});
             console.log(response,'result');
             res.status(200).send({response:response})
         }catch(e){
