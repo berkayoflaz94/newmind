@@ -1,9 +1,7 @@
 const { Kafka } = require('kafkajs')
 
-const kafka = new Kafka({
-    clientId: 'my-kafka-producer2',
-    brokers:['localhost:9092']
-})
+const kafka = new Kafka({ brokers: [process.env.KAFKA_BROKER] });
+
 
 const producer = kafka.producer()
 
@@ -12,7 +10,7 @@ async function sendMessage(topic,message){
     await producer.send({
         topic: topic,
         messages:[
-            { value : message},
+            { value : "asd !!"},
         ],
     })
 }
