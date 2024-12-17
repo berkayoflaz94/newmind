@@ -2,7 +2,7 @@ const { createClient } = require('redis');
 
 async function redisCon() {
     try {
-        const client = createClient({
+        /*const client = createClient({
             url: 'redis://redis:6379'
         });
 
@@ -11,8 +11,8 @@ async function redisCon() {
         // Redis'e bağlan
         await client.connect();
 
-        console.log('Redis’e bağlandık');
-        return client;
+        console.log('Redis’e bağlandık');*/
+        return [];
     } catch (e) {
         console.log(e, 'error');
     }

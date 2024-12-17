@@ -10,7 +10,7 @@ async function sendMessage(topic,message){
     await producer.send({
         topic: topic,
         messages:[
-            { value : "asd !!"},
+            { value : "cihat naber "},
         ],
     })
 }

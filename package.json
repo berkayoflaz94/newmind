@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@elastic/elasticsearch": "^8.17.0",
     "accepts": "^1.3.8",
     "anymatch": "^3.1.3",
     "array-flatten": "^1.1.1",
@@ -45,6 +46,7 @@
     "has-proto": "^1.0.3",
     "has-symbols": "^1.0.3",
     "hasown": "^2.0.2",
+    "http": "^0.0.1-security",
     "http-errors": "^2.0.0",
     "iconv-lite": "^0.4.24",
     "ignore-by-default": "^1.0.1",
@@ -89,6 +91,7 @@
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.6",
     "simple-update-notifier": "^2.0.0",
+    "socket.io": "^4.8.1",
     "statuses": "^2.0.1",
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
@@ -98,7 +101,9 @@
     "undefsafe": "^2.0.5",
     "unpipe": "^1.0.0",
     "utils-merge": "^1.0.1",
-    "vary": "^1.1.2"
+    "vary": "^1.1.2",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

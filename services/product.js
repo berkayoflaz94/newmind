@@ -1,24 +1,11 @@
 
 const mongooseProduct = require('../models/product')
-const { createClient } = require('redis')
-
-
-let redisClient;
-
-async function createRedisClient(){
-    if(!redisClient){
-        redisClient = await createClient()
-        .on('error', err => console.log('Redis Client Error', err))
-        .connect()
-
-    }
-    return redisClient
-}
+const { redisCon } = require('../utils/redis')
 
 async function getAll(){
     const key = "showcase";
     try{
-        const client = await createRedisClient();
+        const client = await redisCon(); //redis bağlantısı
         const getShowcase = await client.get(key);
         if(getShowcase === null){
             const getProduct = await mongooseProduct.find();
